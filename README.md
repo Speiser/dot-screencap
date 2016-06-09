@@ -11,11 +11,16 @@ screencap.TakeScreenshot("filename");    // Adding a filename is optional.
 
  ``` csharp
 // Experimental stage.
-// Throws OutOfMemoryException if recordingTime is to high!
+// Throws OutOfMemoryException if recordingTime is too high!
 var screencap = new ScreenCapture();
 int recordingTime = 5;                  // Time in seconds
 screencap.CreateGif(recordingTime);
  ```
+
+***
+
+###### Documentation
+Click [here](http://speisaa.github.io) to see the documentation.
 
 ***
 
@@ -25,6 +30,7 @@ screencap.CreateGif(recordingTime);
 - [ ] Record videos
 - [ ] Change output path
 - [ ] Add examples
+- [x] Add documentation
 - [ ] Learn to code :joy:
 
 ***

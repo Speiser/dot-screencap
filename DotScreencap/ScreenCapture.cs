@@ -114,6 +114,10 @@
             Screenshot.SaveScreenshotAsJPG(this.ScreenBitmapImage, filename);
         }
 
+        /// <summary>
+        /// Saves a animated *.gif to the execution folder.
+        /// </summary>
+        /// <param name="length">Length of recording time in seconds.</param>
         public void CreateGIF(int length)
         {
             this.imagesForGif = new List<Bitmap>();
@@ -130,7 +134,7 @@
             {
                 this.GetBitmapOfScreen();
                 imagesForGif.Add(this.screenBitmap);
-                Thread.Sleep(1000);
+                Thread.Sleep(498);
             }
         }
     }
