@@ -1,9 +1,11 @@
 ﻿namespace DotScreencap
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
+    using System.Threading;
     using System.Windows.Forms;
     using System.Windows.Media.Imaging;
 
@@ -15,6 +17,8 @@
         private Bitmap screenBitmap;
         private BitmapImage screenBitmapImage;
         private Rectangle screenSize;
+        private Thread gifWorker;
+        private List<Bitmap> imagesForGif;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScreenCapture"/> class.
@@ -108,6 +112,26 @@
             }
 
             Screenshot.SaveScreenshotAsJPG(this.ScreenBitmapImage, filename);
+        }
+
+        public void CreateGIF(int length)
+        {
+            this.imagesForGif = new List<Bitmap>();
+            gifWorker = new Thread(new ThreadStart(GifWork));
+            gifWorker.Start();
+            Thread.Sleep(length * 1000);
+            gifWorker.Abort();
+            Animate.SaveAnimationAsGif(this.imagesForGif);
+        }
+
+        public void GifWork()
+        {
+            while (true)
+            {
+                this.GetBitmapOfScreen();
+                imagesForGif.Add(this.screenBitmap);
+                Thread.Sleep(1000);
+            }
         }
     }
 }
