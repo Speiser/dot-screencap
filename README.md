@@ -30,7 +30,7 @@ Click [here](http://speisaa.github.io) to see the documentation.
 - [ ] Record videos
 - [ ] Change output path
 - [ ] Add examples
-- [x] Add documentation
+- [x] Add documentation    (added in v0.1.2)
 - [ ] Learn to code :joy:
 
 ***

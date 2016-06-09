@@ -3,13 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Interop;
     using System.IO;
     using System.Windows;
+    using System.Windows.Interop;
+    using System.Windows.Media.Imaging;
 
+    /// <summary>
+    /// Represents the animate class.
+    /// Is used for the creation of animated gifs.
+    /// </summary>
     public static class Animate
     {
+        /// <summary>
+        /// Creates a *.gif from a list of bitmaps.
+        /// </summary>
         public static void SaveAnimationAsGif(List<Bitmap> images)
         {
             var encoder = new GifBitmapEncoder();
@@ -24,7 +31,7 @@
                                  Int32Rect.Empty,
                                  BitmapSizeOptions.FromEmptyOptions());
 
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 2; i++)
                     {
                         encoder.Frames.Add(BitmapFrame.Create(source));
                     }
