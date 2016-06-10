@@ -79,10 +79,7 @@
             screenshotName = this.Filename + ".jpg";
             encoder.Frames.Add(BitmapFrame.Create(this.Image));
 
-            using (var filestream = new FileStream(screenshotName, FileMode.Create))
-            {
-                encoder.Save(filestream);
-            }
+            encoder.Save(new FileStream(screenshotName, FileMode.Create));
         }
     }
 }

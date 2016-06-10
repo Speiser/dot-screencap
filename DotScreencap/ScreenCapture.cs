@@ -14,6 +14,7 @@
     /// </summary>
     public sealed class ScreenCapture
     {
+        private AnimatedGifCreator gifCreator;
         private Bitmap screenBitmap;
         private BitmapImage screenBitmapImage;
         private JpgCreator jpgCreator;
@@ -110,7 +111,8 @@
             this.gifWorker.Start();
             Thread.Sleep(length * 1000);
             this.gifWorker.Abort();
-            Animate.SaveAnimationAsGif(this.imagesForGif);
+            gifCreator = new AnimatedGifCreator(this.imagesForGif);
+            gifCreator.SaveAnimationAsGif();
         }
 
         /// <summary>

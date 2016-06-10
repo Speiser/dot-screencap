@@ -46,7 +46,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animate.cs" />
     <Compile Include="AnimatedGifCreator.cs" />
     <Compile Include="JpgCreator.cs" />
     <Compile Include="ScreenCapture.cs" />

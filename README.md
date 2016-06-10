@@ -5,15 +5,16 @@
 
  ``` csharp
 var screencap = new ScreenCapture();  
-screencap.TakeScreenshot("filename");    // Adding a filename is optional.
+screencap.OnScreenshotTaken += Screencap_OnScreenshotTaken; // Subscribe to the event.
+screencap.TakeScreenshot("filename");                       // Adding a filename is optional.
  ```
 + Record your primary screen and save it as gif.
 
  ``` csharp
 // Experimental stage.
-// Throws OutOfMemoryException if recordingTime is too high!
 var screencap = new ScreenCapture();
-int recordingTime = 5;                  // Time in seconds
+int recordingTime = 5;                            // Time in seconds
+screencap.OnGifCreated += Screencap_OnGifCreated; // Subscribe to the event.
 screencap.CreateGif(recordingTime);
  ```
 
@@ -25,12 +26,12 @@ Click [here](http://speisaa.github.io) to see the documentation.
 ***
 
 ###### Planned features
-- [x] Take screenshots     (added in v0.1)
+- [x] Take screenshots     (added in v0.1.0)
 - [x] Create gifs          (added in v0.1.1)
-- [ ] Record videos
-- [ ] Change output path
-- [ ] Add examples
 - [x] Add documentation    (added in v0.1.2)
+- [ ] Add examples
+- [ ] Change output path
+- [ ] Record videos
 - [ ] Learn to code :joy:
 
 ***
