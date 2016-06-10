@@ -5,8 +5,8 @@
 
  ``` csharp
 var screencap = new ScreenCapture();  
-screencap.OnScreenshotTaken += Screencap_OnScreenshotTaken; // Subscribe to the event.
-screencap.TakeScreenshot("filename");                       // Adding a filename is optional.
+screencap.OnScreenshotTaken += Screencap_OnScreenshotTaken; // Optional: Subscribe to the event.
+screencap.TakeScreenshot();                                 // Optional: Add a filename.
  ```
 + Record your primary screen and save it as gif.
 
@@ -14,7 +14,7 @@ screencap.TakeScreenshot("filename");                       // Adding a filename
 // Experimental stage.
 var screencap = new ScreenCapture();
 int recordingTime = 5;                            // Time in seconds
-screencap.OnGifCreated += Screencap_OnGifCreated; // Subscribe to the event.
+screencap.OnGifCreated += Screencap_OnGifCreated; // Optional: Subscribe to the event.
 screencap.CreateGif(recordingTime);
  ```
 
