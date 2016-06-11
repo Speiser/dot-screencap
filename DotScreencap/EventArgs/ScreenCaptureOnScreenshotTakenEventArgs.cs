@@ -10,10 +10,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ScreenCaptureOnScreenshotTakenEventArgs"/> class.
         /// </summary>
-        public ScreenCaptureOnScreenshotTakenEventArgs(ScreenCapture screencap, JpgCreator jpgcreator)
+        public ScreenCaptureOnScreenshotTakenEventArgs(ScreenCapture screencap, PictureCreator pictureCreator)
         {
             this.ScreenCap = screencap;
-            this.JpgCreator = jpgcreator;
+            this.PictureCreator = pictureCreator;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@
         /// <summary>
         /// Gets the jpg creator.
         /// </summary>
-        public JpgCreator JpgCreator
+        public PictureCreator PictureCreator
         {
             get;
             private set;

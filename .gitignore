@@ -5,7 +5,8 @@
 site/
 *.StyleCop
 tests/
-todo.txt
+TODO.txt
+*.cd
 
 # User-specific files
 *.suo

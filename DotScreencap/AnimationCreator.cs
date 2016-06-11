@@ -1,5 +1,6 @@
 ﻿namespace DotScreencap
 {
+    // Rename to AnimationCreator
     using System;
     using System.Collections.Generic;
     using System.Drawing;
@@ -13,25 +14,26 @@
     /// Represents the animate class.
     /// Is used for the creation of animated gifs.
     /// </summary>
-    public sealed class AnimatedGifCreator
+    public sealed class AnimationCreator
     {
-        private int fps;
+        // private int fps;
+        // private int duration;
+        private ScreenCapture screencap;
+        // private Thread workerThread;
 
         /// <summary>
         /// Duration of the gif in seconds.
         /// </summary>
-        private int duration;
         private List<Bitmap> images;
-        private string filename;
-        private ScreenCapture screencap;
-        private Thread workerThread;
 
+        private string filename;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedGifCreator"/> class.
+        /// Initializes a new instance of the <see cref="AnimationCreator"/> class.
         /// </summary>
-        public AnimatedGifCreator(List<Bitmap> images)
+        public AnimationCreator(ScreenCapture screencap, List<Bitmap> images)
         {
+            this.screencap = screencap;
             this.images = images;
             this.filename = "animation" + ".gif";
         }
@@ -59,6 +61,33 @@
                 this.images.RemoveAt(0);
             }
 
+            encoder.Save(new FileStream(this.filename, FileMode.Create));
+        }
+
+        /// <summary>
+        /// Will replace this.SaveAnimationAsGif()().
+        /// </summary>
+        public void PERFORMANCETEST_SaveAnimationAsGif()
+        {
+            var encoder = new GifBitmapEncoder();
+
+            // Create calculation for fps and duration.
+            for (int i = 0; i < 50; i++)
+            {
+                screencap.GetBitmapOfScreen();
+
+                var source = Imaging.CreateBitmapSourceFromHBitmap(
+                             screencap.ScreenBitmap.GetHbitmap(),
+                             IntPtr.Zero,
+                             Int32Rect.Empty,
+                             BitmapSizeOptions.FromEmptyOptions());
+
+                encoder.Frames.Add(BitmapFrame.Create(source));
+                Console.WriteLine(i);
+                Thread.Sleep(200);
+            }
+
+            Thread.Sleep(1000);
             encoder.Save(new FileStream(this.filename, FileMode.Create));
         }
 

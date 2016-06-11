@@ -14,10 +14,10 @@
     /// </summary>
     public sealed class ScreenCapture
     {
-        private AnimatedGifCreator gifCreator;
+        private AnimationCreator animationCreator;
         private Bitmap screenBitmap;
         private BitmapImage screenBitmapImage;
-        private JpgCreator jpgCreator;
+        private PictureCreator pictureCreator;
         private Rectangle screenSize;
         private Thread gifWorker;               // Move to AnimatedGifCreator
         private List<Bitmap> imagesForGif;      // Remove
@@ -38,7 +38,19 @@
         /// <summary>
         /// Will be fired after a screenshot is taken.
         /// </summary>
-        public event EventHandler<ScreenCaptureOnGifCreatedEventArgs> OnGifCreated;
+        public event EventHandler<ScreenCaptureOnAnimationCreatedEventArgs> OnAnimationCreated;
+
+        public Bitmap ScreenBitmap
+        {
+            get
+            {
+                return this.screenBitmap;
+            }
+            set
+            {
+                this.screenBitmap = value;
+            }
+        }
 
         /// <summary>
         /// Gets the ScreenBitmapImage.
@@ -89,14 +101,14 @@
 
             if (filename.Length < 1)
             {
-                this.jpgCreator = new JpgCreator(this.ScreenBitmapImage);
+                this.pictureCreator = new PictureCreator(this.ScreenBitmapImage);
             }
             else
             {
-                this.jpgCreator = new JpgCreator(this.ScreenBitmapImage, filename[0]);
+                this.pictureCreator = new PictureCreator(this.ScreenBitmapImage, filename[0]);
             }
 
-            this.jpgCreator.SaveScreenshotAsJPG();
+            this.pictureCreator.SaveScreenshotAsJPG();
             this.FireOnScreenshotTaken();
         }
 
@@ -111,8 +123,17 @@
             this.gifWorker.Start();
             Thread.Sleep(length * 1000);
             this.gifWorker.Abort();
-            gifCreator = new AnimatedGifCreator(this.imagesForGif);
-            gifCreator.SaveAnimationAsGif();
+            this.animationCreator = new AnimationCreator(this, this.imagesForGif);
+            this.animationCreator.SaveAnimationAsGif();
+        }
+
+        /// <summary>
+        /// Will replace this.CreateGIF().
+        /// </summary>
+        public void PERFORMANCETEST_CreateGIF()
+        {
+            this.animationCreator = new AnimationCreator(this, new List<Bitmap>());
+            this.animationCreator.PERFORMANCETEST_SaveAnimationAsGif();
         }
 
         /// <summary>
@@ -131,7 +152,7 @@
         /// <summary>
         /// Creates a Bitmap of the users screen.
         /// </summary>
-        private void GetBitmapOfScreen()
+        public void GetBitmapOfScreen()
         {
             if (this.ScreenSize == null)
             {
@@ -167,7 +188,15 @@
         /// </summary>
         private void FireOnScreenshotTaken()
         {
-            this.OnScreenshotTaken(this, new ScreenCaptureOnScreenshotTakenEventArgs(this, this.jpgCreator));
+            this.OnScreenshotTaken(this, new ScreenCaptureOnScreenshotTakenEventArgs(this, this.pictureCreator));
+        }
+
+        /// <summary>
+        /// Is fired when animation was created.
+        /// </summary>
+        private void FireOnAnimationCreated()
+        {
+            this.OnAnimationCreated(this, new ScreenCaptureOnAnimationCreatedEventArgs());
         }
     }
 }

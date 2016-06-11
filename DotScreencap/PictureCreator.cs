@@ -5,23 +5,24 @@
     using System.Windows.Media.Imaging;
 
     /// <summary>
-    /// Represents the JpgCreator class.
-    /// Is used to create screenshots.
+    /// Represents the picture creator class.
+    /// Is used to create local picture files.
     /// </summary>
-    public sealed class JpgCreator
+    public sealed class PictureCreator
     {
         private BitmapImage image;
+        private PictureFormat format = PictureFormat.jpg;
         private string filename;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="JpgCreator"/> class.
+        /// Initializes a new instance of the <see cref="PictureCreator"/> class.
         /// </summary>
-        public JpgCreator(BitmapImage image) : this(image, "screenshot") { }
+        public PictureCreator(BitmapImage image) : this(image, "screenshot") { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="JpgCreator"/> class.
+        /// Initializes a new instance of the <see cref="PictureCreator"/> class.
         /// </summary>
-        public JpgCreator(BitmapImage image, string filename)
+        public PictureCreator(BitmapImage image, string filename)
         {
             this.Image = image;
             this.Filename = filename;
@@ -66,6 +67,21 @@
                 }
 
                 this.filename = value;
+            }
+        }
+
+        /// <summary>
+        /// Saves a picture to the execution folder.
+        /// </summary>
+        public void SaveScreenshot()
+        {
+            switch (this.format)
+            {
+                case PictureFormat.jpg:
+                    {
+                        this.SaveScreenshotAsJPG();
+                        break;
+                    }
             }
         }
 

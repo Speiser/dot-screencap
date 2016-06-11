@@ -15,7 +15,9 @@ screencap.TakeScreenshot();                                 // Optional: Add a f
 var screencap = new ScreenCapture();
 int recordingTime = 5;                            // Time in seconds
 screencap.OnGifCreated += Screencap_OnGifCreated; // Optional: Subscribe to the event.
-screencap.CreateGif(recordingTime);
+screencap.CreateGIF(recordingTime);
+// or
+screencap.PERFORMANCETEST_CreateGIF();            // Will record 50 frames in 10 seconds.
  ```
 
 ***
