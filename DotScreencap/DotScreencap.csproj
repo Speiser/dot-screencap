@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnimationCreator.cs" />
+    <Compile Include="EventArgs\AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs.cs" />
     <Compile Include="Enums\AnimationFormat.cs" />
     <Compile Include="PictureCreator.cs" />
     <Compile Include="Enums\PictureFormat.cs" />

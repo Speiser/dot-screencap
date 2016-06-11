@@ -13,17 +13,23 @@ screencap.TakeScreenshot();                                 // Optional: Add a f
  ``` csharp
 // Experimental stage.
 var screencap = new ScreenCapture();
-int recordingTime = 5;                            // Time in seconds
-screencap.OnGifCreated += Screencap_OnGifCreated; // Optional: Subscribe to the event.
-screencap.CreateGIF(recordingTime);
-// or
-screencap.PERFORMANCETEST_CreateGIF();            // Will record 50 frames in 10 seconds.
+screencap.AnimationCreator.OnOutOfMemoryExceptionThrown += AnimationCreator_OnOutOfMemoryExceptionThrown;
+screencap.OnAnimationCreated += Screencap_OnAnimationCreated;   // Optional: Subscribe to the events.
+screencap.CreateGIF(50, 100);                                   // Will record 50 frames, 10 per second.
  ```
 
 ***
 
 ###### Documentation
 Click [here](http://speisaa.github.io) to see the documentation.
+
+***
+
+###### Goals
+* Improve my coding skills :joy:
+* Learn to use git
+* Learn to write clean documentations
+* Make screen capturing easier in C#
 
 ***
 
@@ -34,7 +40,6 @@ Click [here](http://speisaa.github.io) to see the documentation.
 - [ ] Add examples
 - [ ] Change output path
 - [ ] Record videos
-- [ ] Learn to code :joy:
 
 ***
 

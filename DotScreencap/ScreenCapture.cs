@@ -1,11 +1,9 @@
 ﻿namespace DotScreencap
 {
     using System;
-    using System.Collections.Generic;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
-    using System.Threading;
     using System.Windows.Forms;
     using System.Windows.Media.Imaging;
 
@@ -19,8 +17,6 @@
         private BitmapImage screenBitmapImage;
         private PictureCreator pictureCreator;
         private Rectangle screenSize;
-        private Thread gifWorker;               // Move to AnimatedGifCreator
-        private List<Bitmap> imagesForGif;      // Remove
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScreenCapture"/> class.
@@ -28,18 +24,34 @@
         public ScreenCapture()
         {
             this.ScreenSize = Screen.PrimaryScreen.Bounds;
+            this.animationCreator = new AnimationCreator(this);
         }
 
         /// <summary>
-        /// Will be fired after a screenshot is taken.
+        /// Is fired after a screenshot is taken.
         /// </summary>
         public event EventHandler<ScreenCaptureOnScreenshotTakenEventArgs> OnScreenshotTaken;
 
         /// <summary>
-        /// Will be fired after a screenshot is taken.
+        /// Is fired after an animation is created.
         /// </summary>
         public event EventHandler<ScreenCaptureOnAnimationCreatedEventArgs> OnAnimationCreated;
 
+        /// <summary>
+        /// Gets the animation creator.
+        /// Used to subscribe to the OnOutOfMemoryExceptionThrown event.
+        /// </summary>
+        public AnimationCreator AnimationCreator
+        {
+            get
+            {
+                return this.animationCreator;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the screen bitmap.
+        /// </summary>
         public Bitmap ScreenBitmap
         {
             get
@@ -113,40 +125,14 @@
         }
 
         /// <summary>
-        /// Saves a animated *.gif to the execution folder.
+        /// Saves an animated *.gif to the execution folder.
         /// </summary>
-        /// <param name="length">Length of recording time in seconds.</param>
-        public void CreateGIF(int length)
+        /// <param name="frames">Amount of frames that will be captured.</param>
+        /// <param name="wait">Time in ms between each frame.</param>
+        public void CreateGIF(int frames, int wait)
         {
-            this.imagesForGif = new List<Bitmap>();
-            this.gifWorker = new Thread(new ThreadStart(this.GifWork));
-            this.gifWorker.Start();
-            Thread.Sleep(length * 1000);
-            this.gifWorker.Abort();
-            this.animationCreator = new AnimationCreator(this, this.imagesForGif);
-            this.animationCreator.SaveAnimationAsGif();
-        }
-
-        /// <summary>
-        /// Will replace this.CreateGIF().
-        /// </summary>
-        public void PERFORMANCETEST_CreateGIF()
-        {
-            this.animationCreator = new AnimationCreator(this, new List<Bitmap>());
-            this.animationCreator.PERFORMANCETEST_SaveAnimationAsGif();
-        }
-
-        /// <summary>
-        /// Work method to get bitmaps for the gif.
-        /// </summary>
-        private void GifWork()
-        {
-            while (true)
-            {
-                this.GetBitmapOfScreen();
-                this.imagesForGif.Add(this.screenBitmap);
-                Thread.Sleep(200);
-            }
+            this.animationCreator.SaveAnimationAsGif(frames, wait);
+            this.FireOnAnimationCreated();
         }
 
         /// <summary>
@@ -183,20 +169,14 @@
             this.ScreenBitmapImage.EndInit();
         }
 
-        /// <summary>
-        /// Is fired when screenshot was taken.
-        /// </summary>
         private void FireOnScreenshotTaken()
         {
             this.OnScreenshotTaken(this, new ScreenCaptureOnScreenshotTakenEventArgs(this, this.pictureCreator));
         }
 
-        /// <summary>
-        /// Is fired when animation was created.
-        /// </summary>
         private void FireOnAnimationCreated()
         {
-            this.OnAnimationCreated(this, new ScreenCaptureOnAnimationCreatedEventArgs());
+            this.OnAnimationCreated(this, new ScreenCaptureOnAnimationCreatedEventArgs(this, this.AnimationCreator));
         }
     }
 }
