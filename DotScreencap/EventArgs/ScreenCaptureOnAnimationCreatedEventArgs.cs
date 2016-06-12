@@ -26,7 +26,7 @@
         }
 
         /// <summary>
-        /// Gets the jpg creator.
+        /// Gets the animation creator.
         /// </summary>
         public AnimationCreator AnimationCreator
         {

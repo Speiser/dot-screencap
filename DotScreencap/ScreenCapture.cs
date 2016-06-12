@@ -23,17 +23,18 @@
         /// </summary>
         public ScreenCapture()
         {
+            this.AllScreens = Screen.AllScreens;
             this.ScreenSize = Screen.PrimaryScreen.Bounds;
             this.animationCreator = new AnimationCreator(this);
         }
 
         /// <summary>
-        /// Is fired after a screenshot is taken.
+        /// Is fired after a screenshot was taken.
         /// </summary>
         public event EventHandler<ScreenCaptureOnScreenshotTakenEventArgs> OnScreenshotTaken;
 
         /// <summary>
-        /// Is fired after an animation is created.
+        /// Is fired after an animation was created.
         /// </summary>
         public event EventHandler<ScreenCaptureOnAnimationCreatedEventArgs> OnAnimationCreated;
 
@@ -82,7 +83,7 @@
         }
 
         /// <summary>
-        /// Gets the ScreenSize.
+        /// Gets a System.Drawing.Rectangle, representing the bounds of the display.
         /// </summary>
         public Rectangle ScreenSize
         {
@@ -95,6 +96,15 @@
             {
                 this.screenSize = value;
             }
+        }
+
+        /// <summary>
+        /// An array of type System.Windows.Forms.Screen, containing all displays on the system.
+        /// </summary>
+        public Screen[] AllScreens
+        {
+            get;
+            private set;
         }
 
         /// <summary>

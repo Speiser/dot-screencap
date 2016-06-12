@@ -34,18 +34,21 @@ Click [here](http://speisaa.github.io) to see the documentation.
 ***
 
 ###### Planned features
-- [x] Take screenshots     (added in v0.1.0)
-- [x] Create gifs          (added in v0.1.1)
-- [x] Add documentation    (added in v0.1.2)
-- [ ] Add examples
+- [x] Take Screenshots (added in v0.1.0)
+- [x] Create Animations (added in v0.1.1)
+- [x] Add Documentation (added in v0.1.2)
+- [ ] Add Multimonitor support
+- [ ] Add Examples
+- [ ] Add selectable screenregion
 - [ ] Change output path
-- [ ] Record videos
+- [ ] Record Videos
 
 ***
 
 ###### How to use it in your solution
-Download and build it.  
-Add a reference in your solution.
+Download this repository and build it.  
+Add a reference to the built DotScreencap.dll in your solution.  
+Add `using DotScreencap;` to your project files.
 
 ***
 
