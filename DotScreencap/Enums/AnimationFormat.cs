@@ -8,6 +8,6 @@
         /// <summary>
         /// Graphics Interchange Format.
         /// </summary>
-        gif
+        Gif
     }
 }

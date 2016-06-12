@@ -139,8 +139,10 @@
         /// </summary>
         /// <param name="frames">Amount of frames that will be captured.</param>
         /// <param name="wait">Time in ms between each frame.</param>
-        public void CreateGIF(int frames, int wait)
+        /// <param name="filename">Possibly specified filename.</param>
+        public void CreateGIF(int frames, int wait, params string[] filename)
         {
+
             this.animationCreator.SaveAnimationAsGif(frames, wait);
             this.FireOnAnimationCreated();
         }

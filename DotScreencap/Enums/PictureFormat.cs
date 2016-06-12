@@ -6,8 +6,8 @@
     public enum PictureFormat
     {
         /// <summary>
-        /// 
+        /// The jpg format.
         /// </summary>
-        jpg
+        Jpg
     }
 }

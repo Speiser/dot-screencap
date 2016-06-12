@@ -11,7 +11,7 @@
     public sealed class PictureCreator
     {
         private BitmapImage image;
-        private PictureFormat format = PictureFormat.jpg;
+        private PictureFormat format = PictureFormat.Jpg;
         private string filename;
 
         /// <summary>
@@ -77,7 +77,7 @@
         {
             switch (this.format)
             {
-                case PictureFormat.jpg:
+                case PictureFormat.Jpg:
                     {
                         this.SaveScreenshotAsJPG();
                         break;
