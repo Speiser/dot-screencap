@@ -20,6 +20,10 @@
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScreenCapture"/> class.
+        /// If you want to use this with a different screen you have to use:
+        ///     1. ScreenCapture.AllScreens
+        ///     2. Find the screen you want to capture.
+        ///     3. ScreenCapture.ChangeScreen(yourNewScreen)
         /// </summary>
         public ScreenCapture()
         {
@@ -108,6 +112,18 @@
         }
 
         /// <summary>
+        /// Is used to change your screen from e.g.: primary screen to second screen etc.
+        /// Usage:
+        ///     1. ScreenCapture.AllScreens
+        ///     2. Find the screen you want to capture.
+        ///     3. ScreenCapture.ChangeScreen(yourNewScreen)
+        /// </summary>
+        public void ChangeScreen(Screen screen)
+        {
+            this.ScreenSize = screen.Bounds;
+        }
+
+        /// <summary>
         /// Saves a *.jpg to the execution folder.
         /// </summary>
         /// <param name="filename">Possibly specified filename.</param>
@@ -159,7 +175,7 @@
 
             this.screenBitmap = new Bitmap(this.screenSize.Width, this.screenSize.Height);
             Graphics screen = Graphics.FromImage(this.screenBitmap);
-            screen.CopyFromScreen(0, 0, 0, 0, new Size(this.screenSize.Width, this.screenSize.Height));
+            screen.CopyFromScreen(this.ScreenSize.X, 0, 0, 0, new Size(this.ScreenSize.Width, this.ScreenSize.Height));
         }
 
         /// <summary>
