@@ -57,12 +57,12 @@
     <Compile Include="EventArgs\ScreenCaptureOnScreenshotTakenEventArgs.cs" />
     <Compile Include="EventArgs\ScreenCaptureOnAnimationCreatedEventArgs.cs" />
     <Compile Include="Enums\VideoFormat.cs" />
+    <Compile Include="ScreenRegion.cs" />
     <Compile Include="VideoCreator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

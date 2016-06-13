@@ -93,6 +93,7 @@
         {
             string screenshotName;
             JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.QualityLevel = 100;
             screenshotName = (this.Filename == "screenshot") ? this.Filename + count.ToString() + ".jpg" : this.Filename + ".jpg";
             this.count++;
 

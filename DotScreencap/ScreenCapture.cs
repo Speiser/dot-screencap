@@ -175,6 +175,7 @@
 
             this.screenBitmap = new Bitmap(this.screenSize.Width, this.screenSize.Height);
             Graphics screen = Graphics.FromImage(this.screenBitmap);
+            // screen.CopyFromScreen(Upper left corner X, Y, 0, 0, new Size(lower right corner X,Y));
             screen.CopyFromScreen(this.ScreenSize.X, 0, 0, 0, new Size(this.ScreenSize.Width, this.ScreenSize.Height));
         }
 

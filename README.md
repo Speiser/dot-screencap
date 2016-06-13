@@ -21,6 +21,7 @@ screencap.CreateGIF(50, 100);                                   // Will record 5
   Warning: Only tested with 2 screens, but it should work with more aswell.
  ``` csharp
 using System.Windows.Forms;
+
 // Default screen is your Primary Screen!
 var screencap = new ScreenCapture();
 Screen[] myScreens = screencap.AllScreens;
