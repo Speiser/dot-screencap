@@ -31,6 +31,12 @@
         }
 
         /// <summary>
+        /// Is fired after recording was finished.
+        /// (Before file is saved!)
+        /// </summary>
+        public event EventHandler<AnimationCreatorOnAnimationRecordedEventArgs> OnAnimationRecorded;
+
+        /// <summary>
         /// Is fired after an OutOfMemoryException was thrown.
         /// </summary>
         public event EventHandler<AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs> OnOutOfMemoryExceptionThrown;
@@ -85,8 +91,17 @@
                 catch (Exception) { }
             }
 
+            this.FireOnAnimationRecorded();
             Thread.Sleep(1000);
             encoder.Save(new FileStream(this.filename, FileMode.Create));
+        }
+
+        private void FireOnAnimationRecorded()
+        {
+            if (this.OnAnimationRecorded != null)
+            {
+                this.OnAnimationRecorded(this, new AnimationCreatorOnAnimationRecordedEventArgs(this));
+            }
         }
 
         private void FireOnOutOfMemoryExceptionThrown(OutOfMemoryException e, int thrownAfterXFrames)

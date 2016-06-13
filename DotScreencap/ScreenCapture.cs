@@ -123,14 +123,8 @@
 
             if (this.pictureCreator == null)
             {
-                if (filename.Length < 1)
-                {
-                    this.pictureCreator = new PictureCreator(this.ScreenBitmapImage);
-                }
-                else
-                {
-                    this.pictureCreator = new PictureCreator(this.ScreenBitmapImage, filename[0]);
-                }
+                this.pictureCreator = (filename.Length < 1) ? new PictureCreator(this.ScreenBitmapImage) :
+                                                              new PictureCreator(this.ScreenBitmapImage, filename[0]);
             }
             else
             {
