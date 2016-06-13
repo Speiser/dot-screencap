@@ -8,6 +8,9 @@ tests/
 TODO.txt
 *.cd
 
+# Will be added later
+Examples/
+
 # User-specific files
 *.suo
 *.user

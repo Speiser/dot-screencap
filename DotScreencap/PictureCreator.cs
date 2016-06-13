@@ -13,6 +13,7 @@
         private BitmapImage image;
         private PictureFormat format = PictureFormat.Jpg;
         private string filename;
+        private int count = 1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PictureCreator"/> class.
@@ -38,7 +39,7 @@
                 return this.image;
             }
 
-            private set
+            set
             {
                 if (value == null)
                 {
@@ -92,10 +93,15 @@
         {
             string screenshotName;
             JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            screenshotName = this.Filename + ".jpg";
+            screenshotName = (this.Filename == "screenshot") ? this.Filename + count.ToString() + ".jpg" : this.Filename + ".jpg";
+            this.count++;
+
             encoder.Frames.Add(BitmapFrame.Create(this.Image));
 
-            encoder.Save(new FileStream(screenshotName, FileMode.Create));
+            using (var filestream = new FileStream(screenshotName, FileMode.OpenOrCreate))
+            {
+                encoder.Save(filestream);
+            }
         }
     }
 }

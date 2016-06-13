@@ -121,13 +121,20 @@
                 throw new NullReferenceException();
             }
 
-            if (filename.Length < 1)
+            if (this.pictureCreator == null)
             {
-                this.pictureCreator = new PictureCreator(this.ScreenBitmapImage);
+                if (filename.Length < 1)
+                {
+                    this.pictureCreator = new PictureCreator(this.ScreenBitmapImage);
+                }
+                else
+                {
+                    this.pictureCreator = new PictureCreator(this.ScreenBitmapImage, filename[0]);
+                }
             }
             else
             {
-                this.pictureCreator = new PictureCreator(this.ScreenBitmapImage, filename[0]);
+                this.pictureCreator.Image = this.ScreenBitmapImage;
             }
 
             this.pictureCreator.SaveScreenshotAsJPG();
