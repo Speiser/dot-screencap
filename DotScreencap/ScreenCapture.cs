@@ -142,7 +142,6 @@
         /// <param name="filename">Possibly specified filename.</param>
         public void CreateGIF(int frames, int wait, params string[] filename)
         {
-
             this.animationCreator.SaveAnimationAsGif(frames, wait);
             this.FireOnAnimationCreated();
         }
@@ -183,12 +182,18 @@
 
         private void FireOnScreenshotTaken()
         {
-            this.OnScreenshotTaken(this, new ScreenCaptureOnScreenshotTakenEventArgs(this, this.pictureCreator));
+            if (this.OnScreenshotTaken != null)
+            {
+                this.OnScreenshotTaken(this, new ScreenCaptureOnScreenshotTakenEventArgs(this, this.pictureCreator));
+            }
         }
 
         private void FireOnAnimationCreated()
         {
-            this.OnAnimationCreated(this, new ScreenCaptureOnAnimationCreatedEventArgs(this, this.AnimationCreator));
+            if (this.OnAnimationCreated != null)
+            {
+                this.OnAnimationCreated(this, new ScreenCaptureOnAnimationCreatedEventArgs(this, this.AnimationCreator));
+            }
         }
     }
 }

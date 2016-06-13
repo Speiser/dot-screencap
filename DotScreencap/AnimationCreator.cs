@@ -91,7 +91,10 @@
 
         private void FireOnOutOfMemoryExceptionThrown(OutOfMemoryException e, int thrownAfterXFrames)
         {
-            this.OnOutOfMemoryExceptionThrown(this, new AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs(e, thrownAfterXFrames));
+            if (this.OnOutOfMemoryExceptionThrown != null)
+            {
+                this.OnOutOfMemoryExceptionThrown(this, new AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs(e, thrownAfterXFrames));
+            }
         }
     }
 }
