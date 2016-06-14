@@ -1,5 +1,11 @@
 # dot-screencap
 
+###### Example
+Created with dot-screencap v0.1.51  
+![dot-screencap](https://github.com/speisaa/dot-screencap/raw/master/Documentation/Pictues/v0151showcase.gif)  
+
+***
+
 ###### Features
 + Take screenshots of your primary screen.
 
