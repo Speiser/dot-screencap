@@ -29,6 +29,7 @@
         {
             this.AllScreens = Screen.AllScreens;
             this.ScreenSize = Screen.PrimaryScreen.Bounds;
+            this.ScreenRegion = new ScreenRegion(new Point(0, 0), new Point(this.ScreenSize.Width, this.ScreenSize.Height));
             this.animationCreator = new AnimationCreator(this);
         }
 
@@ -112,6 +113,15 @@
         }
 
         /// <summary>
+        /// Gets or sets the points of the selected screen region.
+        /// </summary>
+        public ScreenRegion ScreenRegion
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Is used to change your screen from e.g.: primary screen to second screen etc.
         /// Usage:
         ///     1. ScreenCapture.AllScreens
@@ -173,10 +183,12 @@
                 throw new NullReferenceException();
             }
 
-            this.screenBitmap = new Bitmap(this.screenSize.Width, this.screenSize.Height);
+            int width = this.ScreenRegion.LowerRightCorner.X - this.ScreenRegion.UpperLeftCorner.X;
+            int height = this.ScreenRegion.LowerRightCorner.Y - this.ScreenRegion.UpperLeftCorner.Y;
+            this.screenBitmap = new Bitmap(width, height);
             Graphics screen = Graphics.FromImage(this.screenBitmap);
             // screen.CopyFromScreen(Upper left corner X, Y, 0, 0, new Size(lower right corner X,Y));
-            screen.CopyFromScreen(this.ScreenSize.X, 0, 0, 0, new Size(this.ScreenSize.Width, this.ScreenSize.Height));
+            screen.CopyFromScreen(this.ScreenRegion.UpperLeftCorner.X, this.ScreenRegion.UpperLeftCorner.Y, 0, 0, new Size(width, height));
         }
 
         /// <summary>

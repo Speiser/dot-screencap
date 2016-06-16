@@ -1,7 +1,7 @@
 # dot-screencap
 
 ###### Example
-Created with dot-screencap v0.1.51  
+Animation created with dot-screencap v0.1.51  
 ![dot-screencap](https://github.com/speisaa/dot-screencap/raw/master/Documentation/Pictues/v0151showcase.gif)  
 
 ***
@@ -36,6 +36,16 @@ Screen[] myScreens = screencap.AllScreens;
 screencap.ChangeScreen(myScreens[1]);   // myScreens[1] is my second screen.
  ```
 
++ Selectable screenregion.  
+ ``` csharp
+using System.Drawing;
+
+var screencap = new ScreenCapture();
+screencap.ScreenRegion.UpperLeftCorner = new Point(100, 100);
+// or
+screencap.ScreenRegion.SetLowerRightCorner(); // Will set the Point to the current mouse position.
+ ```
+
 ***
 
 ###### Documentation
@@ -56,8 +66,9 @@ Click [here](http://speisaa.github.io) to see the documentation.
 - [x] Create Animations (added in v0.1.1)
 - [x] Add Documentation (added in v0.1.2)
 - [x] Add Multimonitor support (added in v0.1.5)
+- [x] Add selectable screenregion (added in v0.1.6)
+- [ ] Change output resolution
 - [ ] Add Examples
-- [ ] Add selectable screenregion
 - [ ] Change output path
 - [ ] Record Videos
 

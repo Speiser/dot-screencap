@@ -12,7 +12,11 @@
         /// Used to select a screenregion for animations, screenshots and videos.
         /// Use: SetUpperLeftCorner(), SetLowerRightCorner().
         /// </summary>
-        public ScreenRegion() { }
+        public ScreenRegion(Point upperleft, Point lowerright)
+        {
+            this.UpperLeftCorner = upperleft;
+            this.LowerRightCorner = lowerright;
+        }
 
         /// <summary>
         /// Gets the upper left corner position.
@@ -20,7 +24,7 @@
         public Point UpperLeftCorner
         {
             get;
-            private set;
+            set;
         }
 
         /// <summary>
@@ -29,7 +33,7 @@
         public Point LowerRightCorner
         {
             get;
-            private set;
+            set;
         }
 
         /// <summary>
