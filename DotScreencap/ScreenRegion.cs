@@ -9,7 +9,8 @@
     public class ScreenRegion
     {
         /// <summary>
-        /// Used to select a screenregion for animations, screenshots and videos.
+        /// Initializes a new instance of the <see cref="ScreenRegion"/> class.
+        /// Used to select a screen region for animations, screenshots and videos.
         /// Use: SetUpperLeftCorner(), SetLowerRightCorner().
         /// </summary>
         public ScreenRegion(Point upperleft, Point lowerright)
@@ -19,7 +20,7 @@
         }
 
         /// <summary>
-        /// Gets the upper left corner position.
+        /// Gets or sets the upper left corner position.
         /// </summary>
         public Point UpperLeftCorner
         {
@@ -28,7 +29,7 @@
         }
 
         /// <summary>
-        /// Gets the lower right corner position.
+        /// Gets or sets the lower right corner position.
         /// </summary>
         public Point LowerRightCorner
         {

@@ -64,6 +64,7 @@
             {
                 return this.screenBitmap;
             }
+
             set
             {
                 this.screenBitmap = value;
@@ -104,7 +105,7 @@
         }
 
         /// <summary>
-        /// An array of type System.Windows.Forms.Screen, containing all displays on the system.
+        /// Gets an array of type System.Windows.Forms.Screen, containing all displays on the system.
         /// </summary>
         public Screen[] AllScreens
         {
@@ -165,7 +166,7 @@
         /// Saves an animated *.gif to the execution folder.
         /// </summary>
         /// <param name="frames">Amount of frames that will be captured.</param>
-        /// <param name="wait">Time in ms between each frame.</param>
+        /// <param name="wait">Time in milliseconds between each frame.</param>
         /// <param name="filename">Possibly specified filename.</param>
         public void CreateGIF(int frames, int wait, params string[] filename)
         {
@@ -187,7 +188,6 @@
             int height = this.ScreenRegion.LowerRightCorner.Y - this.ScreenRegion.UpperLeftCorner.Y;
             this.screenBitmap = new Bitmap(width, height);
             Graphics screen = Graphics.FromImage(this.screenBitmap);
-            // screen.CopyFromScreen(Upper left corner X, Y, 0, 0, new Size(lower right corner X,Y));
             screen.CopyFromScreen(this.ScreenRegion.UpperLeftCorner.X, this.ScreenRegion.UpperLeftCorner.Y, 0, 0, new Size(width, height));
         }
 

@@ -30,7 +30,7 @@
         }
 
         /// <summary>
-        /// Gets the image.
+        /// Gets or sets the bitmap image.
         /// </summary>
         public BitmapImage Image
         {
@@ -94,7 +94,7 @@
             string screenshotName;
             JpegBitmapEncoder encoder = new JpegBitmapEncoder();
             encoder.QualityLevel = 100;
-            screenshotName = (this.Filename == "screenshot") ? this.Filename + count.ToString() + ".jpg" : this.Filename + ".jpg";
+            screenshotName = (this.Filename == "screenshot") ? this.Filename + this.count.ToString() + ".jpg" : this.Filename + ".jpg";
             this.count++;
 
             encoder.Frames.Add(BitmapFrame.Create(this.Image));

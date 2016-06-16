@@ -31,8 +31,7 @@
         }
 
         /// <summary>
-        /// Is fired after recording was finished.
-        /// (Before file is saved!)
+        /// Is fired after recording was finished, before file is saved.
         /// </summary>
         public event EventHandler<AnimationCreatorOnAnimationRecordedEventArgs> OnAnimationRecorded;
 
@@ -42,7 +41,7 @@
         public event EventHandler<AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs> OnOutOfMemoryExceptionThrown;
 
         /// <summary>
-        /// File name of the animation.
+        /// Gets or sets the file name of the animation.
         /// </summary>
         public string Filename
         {
@@ -61,6 +60,7 @@
                 this.filename = value;
             }
         }
+
         /// <summary>
         /// Creates a *.gif from a list of bitmaps.
         /// </summary>
@@ -72,10 +72,10 @@
             {
                 try
                 {
-                    screencap.GetBitmapOfScreen();
+                    this.screencap.GetBitmapOfScreen();
 
                     var source = Imaging.CreateBitmapSourceFromHBitmap(
-                                 screencap.ScreenBitmap.GetHbitmap(),
+                                 this.screencap.ScreenBitmap.GetHbitmap(),
                                  IntPtr.Zero,
                                  Int32Rect.Empty,
                                  BitmapSizeOptions.FromEmptyOptions());
@@ -85,7 +85,7 @@
                 }
                 catch (OutOfMemoryException e)
                 {
-                    FireOnOutOfMemoryExceptionThrown(e, i);
+                    this.FireOnOutOfMemoryExceptionThrown(e, i);
                     break;
                 }
                 catch (Exception) { }
