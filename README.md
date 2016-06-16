@@ -1,13 +1,8 @@
 # dot-screencap
 
 ###### Example
-<<<<<<< HEAD
 Animation created with dot-screencap v0.1.51  
 ![dot-screencap](https://github.com/speisaa/dot-screencap/raw/master/Documentation/Pictues/v0151showcase.gif)  
-=======
-Created with dot-screencap v0.1.51  
-![dot-screencap](https://github.com/Speisaa/dot-screencap/raw/master/Documentation/Pictures/v0151showcase.gif)  
->>>>>>> origin/master
 
 ***
 
