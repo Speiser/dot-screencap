@@ -50,7 +50,7 @@ screencap.ScreenRegion.SetLowerRightCorner(); // Will set the Point to the curre
 ***
 
 ###### Documentation
-Click [here](http://speisaa.github.io) to see the documentation.
+Click [here](https://github.com/Speisaa/dot-screencap/blob/master/Documentation/README.md) to see the documentation.
 
 ***
 
