@@ -37,6 +37,7 @@ screencap.ChangeScreen(myScreens[1]);   // myScreens[1] is my second screen.
  ```
 
 + Selectable screenregion.  
+  If you use this you won´t have to set your screen.
  ``` csharp
 using System.Drawing;
 
