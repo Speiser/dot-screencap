@@ -5,6 +5,9 @@
 Add a reference to the built DotScreencap.dll in your solution.  
 Add `using DotScreencap;` to your project files.
 
+## Want to Contribute?
+Please read [CONTRIBUTING.md](https://github.com/Speisaa/dot-screencap/blob/master/CONTRIBUTING.md).
+
 ## Getting started
 #### Initialize a new ScreenCapture instance.
 ``` csharp
@@ -94,4 +97,4 @@ namespace ScreenShot
 ```
 
 <br><br>
-Lastest updated: dot-screencap v0.1.62
+Lastest updated: dot-screencap v0.1.63
