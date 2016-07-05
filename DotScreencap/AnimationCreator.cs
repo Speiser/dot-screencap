@@ -1,54 +1,45 @@
-﻿namespace DotScreencap
-{
-    using System;
-    using System.IO;
-    using System.Threading;
-    using System.Windows;
-    using System.Windows.Interop;
-    using System.Windows.Media.Imaging;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Threading;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
+using DotScreencap.EventArgs;
 
+namespace DotScreencap
+{
     /// <summary>
-    /// Represents the animate class.
-    /// Is used for the creation of animated gifs.
+    ///     Represents the animate class.
+    ///     Is used for the creation of animated gifs.
     /// </summary>
     public sealed class AnimationCreator
     {
-        private ScreenCapture screencap;
-        private string filename;
+        private readonly ScreenCapture _screencap;
+        private string _filename;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationCreator"/> class.
+        ///     Initializes a new instance of the <see cref="AnimationCreator" /> class.
         /// </summary>
-        public AnimationCreator(ScreenCapture screencap) : this(screencap, "animation") { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationCreator"/> class.
-        /// </summary>
-        public AnimationCreator(ScreenCapture screencap, string filename)
+        public AnimationCreator(ScreenCapture screencap) : this(screencap, "animation")
         {
-            this.screencap = screencap;
-            this.Filename = filename + ".gif";
         }
 
         /// <summary>
-        /// Is fired after recording was finished, before file is saved.
+        ///     Initializes a new instance of the <see cref="AnimationCreator" /> class.
         /// </summary>
-        public event EventHandler<AnimationCreatorOnAnimationRecordedEventArgs> OnAnimationRecorded;
+        public AnimationCreator(ScreenCapture screencap, string filename)
+        {
+            _screencap = screencap;
+            Filename = filename + ".gif";
+        }
 
         /// <summary>
-        /// Is fired after an OutOfMemoryException was thrown.
-        /// </summary>
-        public event EventHandler<AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs> OnOutOfMemoryExceptionThrown;
-
-        /// <summary>
-        /// Gets or sets the file name of the animation.
+        ///     Gets or sets the file name of the animation.
         /// </summary>
         public string Filename
         {
-            get
-            {
-                return this.filename;
-            }
+            get { return _filename; }
 
             set
             {
@@ -57,59 +48,71 @@
                     throw new ArgumentOutOfRangeException();
                 }
 
-                this.filename = value;
+                _filename = value;
             }
         }
 
         /// <summary>
-        /// Creates a *.gif from a list of bitmaps.
+        ///     Is fired after recording was finished, before file is saved.
+        /// </summary>
+        public event EventHandler<AnimationCreatorOnAnimationRecordedEventArgs> OnAnimationRecorded;
+
+        /// <summary>
+        ///     Is fired after an OutOfMemoryException was thrown.
+        /// </summary>
+        public event EventHandler<AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs> OnOutOfMemoryExceptionThrown;
+
+        /// <summary>
+        ///     Creates a *.gif from a list of bitmaps.
         /// </summary>
         public void SaveAnimationAsGif(int frames, int wait)
         {
             var encoder = new GifBitmapEncoder();
 
-            for (int i = 0; i < frames; i++)
+            for (var i = 0; i < frames; i++)
             {
                 try
                 {
-                    this.screencap.GetBitmapOfScreen();
+                    _screencap.GetBitmapOfScreen();
 
                     var source = Imaging.CreateBitmapSourceFromHBitmap(
-                                 this.screencap.ScreenBitmap.GetHbitmap(),
-                                 IntPtr.Zero,
-                                 Int32Rect.Empty,
-                                 BitmapSizeOptions.FromEmptyOptions());
+                        _screencap.ScreenBitmap.Bitmap.GetHbitmap(),
+                        IntPtr.Zero,
+                        Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions());
 
                     encoder.Frames.Add(BitmapFrame.Create(source));
                     Thread.Sleep(wait);
                 }
+
                 catch (OutOfMemoryException e)
                 {
-                    this.FireOnOutOfMemoryExceptionThrown(e, i);
+                    RaiseOnOutOfMemoryExceptionThrown(e, i);
                     break;
                 }
-                catch (Exception) { }
+
+                catch (Exception e)
+                {
+                    Trace.WriteLine(e.Message);
+                }
             }
 
-            this.FireOnAnimationRecorded();
+            RaiseOnAnimationRecorded();
+
             Thread.Sleep(1000);
-            encoder.Save(new FileStream(this.filename, FileMode.Create));
+
+            encoder.Save(new FileStream(_filename, FileMode.Create));
         }
 
-        private void FireOnAnimationRecorded()
+        private void RaiseOnAnimationRecorded()
         {
-            if (this.OnAnimationRecorded != null)
-            {
-                this.OnAnimationRecorded(this, new AnimationCreatorOnAnimationRecordedEventArgs(this));
-            }
+            OnAnimationRecorded?.Invoke(this, new AnimationCreatorOnAnimationRecordedEventArgs(this));
         }
 
-        private void FireOnOutOfMemoryExceptionThrown(OutOfMemoryException e, int thrownAfterXFrames)
+        private void RaiseOnOutOfMemoryExceptionThrown(OutOfMemoryException e, int thrownAfterXFrames)
         {
-            if (this.OnOutOfMemoryExceptionThrown != null)
-            {
-                this.OnOutOfMemoryExceptionThrown(this, new AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs(e, thrownAfterXFrames));
-            }
+            OnOutOfMemoryExceptionThrown?.Invoke(this,
+                new AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs(e, thrownAfterXFrames));
         }
     }
 }

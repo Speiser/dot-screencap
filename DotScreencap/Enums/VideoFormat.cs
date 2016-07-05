@@ -1,9 +1,13 @@
-﻿namespace DotScreencap
+﻿namespace DotScreencap.Enums
 {
     /// <summary>
-    /// Video formats.
+    ///     Video formats.
     /// </summary>
     public enum VideoFormat
     {
+        /// <summary>
+        ///     The avi format.
+        /// </summary>
+        Avi
     }
 }

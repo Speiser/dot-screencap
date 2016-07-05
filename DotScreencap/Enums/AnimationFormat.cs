@@ -1,12 +1,12 @@
-﻿namespace DotScreencap
+﻿namespace DotScreencap.Enums
 {
     /// <summary>
-    /// Animation formats.
+    ///     Animation formats.
     /// </summary>
     public enum AnimationFormat
     {
         /// <summary>
-        /// Graphics Interchange Format.
+        ///     Graphics Interchange Format.
         /// </summary>
         Gif
     }

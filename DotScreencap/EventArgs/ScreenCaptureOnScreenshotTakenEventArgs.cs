@@ -1,37 +1,27 @@
-﻿namespace DotScreencap
+﻿namespace DotScreencap.EventArgs
 {
-    using System;
-
     /// <summary>
-    /// Represents the ScreenCaptureOnScreenshotTakenEventArgs class.
+    ///     Represents the ScreenCaptureOnScreenshotTakenEventArgs class.
     /// </summary>
-    public class ScreenCaptureOnScreenshotTakenEventArgs : EventArgs 
+    public class ScreenCaptureOnScreenshotTakenEventArgs : System.EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ScreenCaptureOnScreenshotTakenEventArgs"/> class.
+        ///     Initializes a new instance of the <see cref="ScreenCaptureOnScreenshotTakenEventArgs" /> class.
         /// </summary>
         public ScreenCaptureOnScreenshotTakenEventArgs(ScreenCapture screencap, PictureCreator pictureCreator)
         {
-            this.ScreenCap = screencap;
-            this.PictureCreator = pictureCreator;
+            ScreenCap = screencap;
+            PictureCreator = pictureCreator;
         }
 
         /// <summary>
-        /// Gets the screen capturer.
+        ///     Gets the screen capturer.
         /// </summary>
-        public ScreenCapture ScreenCap
-        {
-            get;
-            private set;
-        }
+        public ScreenCapture ScreenCap { get; private set; }
 
         /// <summary>
-        /// Gets the jpg creator.
+        ///     Gets the jpg creator.
         /// </summary>
-        public PictureCreator PictureCreator
-        {
-            get;
-            private set;
-        }
+        public PictureCreator PictureCreator { get; private set; }
     }
 }
