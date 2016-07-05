@@ -1,37 +1,29 @@
-﻿namespace DotScreencap
-{
-    using System;
+﻿using System;
 
+namespace DotScreencap.EventArgs
+{
     /// <summary>
-    /// Represents the AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs class.
+    ///     Represents the AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs class.
     /// </summary>
-    public class AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs : EventArgs 
+    public class AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs : System.EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs"/> class.
+        ///     Initializes a new instance of the <see cref="AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs" /> class.
         /// </summary>
         public AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs(OutOfMemoryException e, int thrownAfterXFrames)
         {
-            this.Exception = e;
-            this.ThrownAfterXFrames = thrownAfterXFrames;
+            Exception = e;
+            ThrownAfterXFrames = thrownAfterXFrames;
         }
 
         /// <summary>
-        /// Gets the OutOfMemoryException.
+        ///     Gets the OutOfMemoryException.
         /// </summary>
-        public OutOfMemoryException Exception
-        {
-            get;
-            private set;
-        }
+        public OutOfMemoryException Exception { get; private set; }
 
         /// <summary>
-        /// Gets the number of the last frame which was added to the animation.
+        ///     Gets the number of the last frame which was added to the animation.
         /// </summary>
-        public int ThrownAfterXFrames
-        {
-            get;
-            private set;
-        }
+        public int ThrownAfterXFrames { get; private set; }
     }
 }

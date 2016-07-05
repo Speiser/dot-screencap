@@ -1,229 +1,180 @@
-﻿namespace DotScreencap
-{
-    using System;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.IO;
-    using System.Windows.Forms;
-    using System.Windows.Media.Imaging;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Windows.Forms;
+using System.Windows.Media.Imaging;
+using DotScreencap.EventArgs;
 
+namespace DotScreencap
+{
     /// <summary>
-    /// Represents the ScreenCapture class.
+    ///     Represents the ScreenCapture class.
     /// </summary>
     public sealed class ScreenCapture
     {
-        private AnimationCreator animationCreator;
-        private Bitmap screenBitmap;
-        private BitmapImage screenBitmapImage;
-        private PictureCreator pictureCreator;
-        private Rectangle screenSize;
+        private PictureCreator _pictureCreator;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ScreenCapture"/> class.
-        /// If you want to use this with a different screen you have to use:
+        ///     Initializes a new instance of the <see cref="ScreenCapture" /> class.
+        ///     If you want to use this with a different screen you have to use:
         ///     1. ScreenCapture.AllScreens
         ///     2. Find the screen you want to capture.
         ///     3. ScreenCapture.ChangeScreen(yourNewScreen)
         /// </summary>
         public ScreenCapture()
         {
-            this.AllScreens = Screen.AllScreens;
-            this.ScreenSize = Screen.PrimaryScreen.Bounds;
-            this.ScreenRegion = new ScreenRegion(new Point(0, 0), new Point(this.ScreenSize.Width, this.ScreenSize.Height));
-            this.animationCreator = new AnimationCreator(this);
+            AllScreens = Screen.AllScreens;
+            ScreenSize = Screen.PrimaryScreen.Bounds;
+            ScreenRegion = new ScreenRegion(new Point(0, 0), new Point(ScreenSize.Width, ScreenSize.Height));
+            AnimationCreator = new AnimationCreator(this);
         }
 
         /// <summary>
-        /// Is fired after a screenshot was taken.
+        ///     Gets the animation creator.
+        ///     Used to subscribe to the OnOutOfMemoryExceptionThrown event.
+        /// </summary>
+        public AnimationCreator AnimationCreator { get; }
+
+        /// <summary>
+        ///     Gets or sets the screen bitmap.
+        /// </summary>
+        public DirectBitmap ScreenBitmap { get; set; }
+
+        /// <summary>
+        ///     Gets the ScreenBitmapImage.
+        ///     Can be used for WPF ImageBox.
+        /// </summary>
+        public BitmapImage ScreenBitmapImage { get; private set; }
+
+        /// <summary>
+        ///     Gets a System.Drawing.Rectangle, representing the bounds of the display.
+        /// </summary>
+        public Rectangle ScreenSize { get; private set; }
+
+        /// <summary>
+        ///     Gets an array of type System.Windows.Forms.Screen, containing all displays on the system.
+        /// </summary>
+        public Screen[] AllScreens { get; private set; }
+
+        /// <summary>
+        ///     Gets or sets the points of the selected screen region.
+        /// </summary>
+        public ScreenRegion ScreenRegion { get; set; }
+
+        /// <summary>
+        ///     Is fired after a screenshot was taken.
         /// </summary>
         public event EventHandler<ScreenCaptureOnScreenshotTakenEventArgs> OnScreenshotTaken;
 
         /// <summary>
-        /// Is fired after an animation was created.
+        ///     Is fired after an animation was created.
         /// </summary>
         public event EventHandler<ScreenCaptureOnAnimationCreatedEventArgs> OnAnimationCreated;
 
         /// <summary>
-        /// Gets the animation creator.
-        /// Used to subscribe to the OnOutOfMemoryExceptionThrown event.
-        /// </summary>
-        public AnimationCreator AnimationCreator
-        {
-            get
-            {
-                return this.animationCreator;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the screen bitmap.
-        /// </summary>
-        public Bitmap ScreenBitmap
-        {
-            get
-            {
-                return this.screenBitmap;
-            }
-
-            set
-            {
-                this.screenBitmap = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the ScreenBitmapImage.
-        /// Can be used for WPF ImageBox.
-        /// </summary>
-        public BitmapImage ScreenBitmapImage
-        {
-            get
-            {
-                return this.screenBitmapImage;
-            }
-
-            private set
-            {
-                this.screenBitmapImage = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets a System.Drawing.Rectangle, representing the bounds of the display.
-        /// </summary>
-        public Rectangle ScreenSize
-        {
-            get
-            {
-                return this.screenSize;
-            }
-
-            private set
-            {
-                this.screenSize = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets an array of type System.Windows.Forms.Screen, containing all displays on the system.
-        /// </summary>
-        public Screen[] AllScreens
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets or sets the points of the selected screen region.
-        /// </summary>
-        public ScreenRegion ScreenRegion
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Is used to change your screen from e.g.: primary screen to second screen etc.
-        /// Usage:
+        ///     Is used to change your screen from e.g.: primary screen to second screen etc.
+        ///     Usage:
         ///     1. ScreenCapture.AllScreens
         ///     2. Find the screen you want to capture.
         ///     3. ScreenCapture.ChangeScreen(yourNewScreen)
         /// </summary>
         public void ChangeScreen(Screen screen)
         {
-            this.ScreenSize = screen.Bounds;
+            ScreenSize = screen.Bounds;
         }
 
         /// <summary>
-        /// Saves a *.jpg to the execution folder.
+        ///     Saves a *.jpg to the execution folder.
         /// </summary>
         /// <param name="filename">Possibly specified filename.</param>
         public void TakeScreenshot(params string[] filename)
         {
-            this.GetBitmapOfScreen();
-            this.ConvertBitmapToBitmapImage();
+            GetBitmapOfScreen();
+            ConvertBitmapToBitmapImage();
 
-            if (this.ScreenBitmapImage == null)
+            if (ScreenBitmapImage == null)
             {
                 throw new NullReferenceException();
             }
 
-            if (this.pictureCreator == null)
+            if (_pictureCreator == null)
             {
-                this.pictureCreator = (filename.Length < 1) ? new PictureCreator(this.ScreenBitmapImage) :
-                                                              new PictureCreator(this.ScreenBitmapImage, filename[0]);
+                _pictureCreator = filename.Length < 1
+                    ? new PictureCreator(ScreenBitmapImage)
+                    : new PictureCreator(ScreenBitmapImage, filename[0]);
             }
             else
             {
-                this.pictureCreator.Image = this.ScreenBitmapImage;
+                _pictureCreator.Image = ScreenBitmapImage;
             }
 
-            this.pictureCreator.SaveScreenshotAsJPG();
-            this.FireOnScreenshotTaken();
+            _pictureCreator.SaveScreenshotAsJpg();
+
+            RaiseOnScreenshotTaken();
         }
 
         /// <summary>
-        /// Saves an animated *.gif to the execution folder.
+        ///     Saves an animated *.gif to the execution folder.
         /// </summary>
         /// <param name="frames">Amount of frames that will be captured.</param>
         /// <param name="wait">Time in milliseconds between each frame.</param>
         /// <param name="filename">Possibly specified filename.</param>
-        public void CreateGIF(int frames, int wait, params string[] filename)
+        public void CreateGif(int frames, int wait, params string[] filename)
         {
-            this.animationCreator.SaveAnimationAsGif(frames, wait);
-            this.FireOnAnimationCreated();
+            AnimationCreator.SaveAnimationAsGif(frames, wait);
+            RaiseOnAnimationCreated();
         }
 
         /// <summary>
-        /// Creates a Bitmap of the users screen.
+        ///     Creates a Bitmap of the users screen.
         /// </summary>
-        public void GetBitmapOfScreen()
+        public void GetBitmapOfScreen(bool raiseOnScreenShotEvent = false)
         {
-            if (this.ScreenSize == null)
+            if (ScreenSize == null)
             {
                 throw new NullReferenceException();
             }
 
-            int width = this.ScreenRegion.LowerRightCorner.X - this.ScreenRegion.UpperLeftCorner.X;
-            int height = this.ScreenRegion.LowerRightCorner.Y - this.ScreenRegion.UpperLeftCorner.Y;
-            this.screenBitmap = new Bitmap(width, height);
-            Graphics screen = Graphics.FromImage(this.screenBitmap);
-            screen.CopyFromScreen(this.ScreenRegion.UpperLeftCorner.X, this.ScreenRegion.UpperLeftCorner.Y, 0, 0, new Size(width, height));
+            var width = ScreenRegion.LowerRightCorner.X - ScreenRegion.UpperLeftCorner.X;
+            var height = ScreenRegion.LowerRightCorner.Y - ScreenRegion.UpperLeftCorner.Y;
+            ScreenBitmap = new DirectBitmap(width, height);
+            var screen = Graphics.FromImage(ScreenBitmap.Bitmap);
+            screen.CopyFromScreen(ScreenRegion.UpperLeftCorner.X, ScreenRegion.UpperLeftCorner.Y, 0, 0,
+                new Size(width, height));
+            if (raiseOnScreenShotEvent)
+            {
+                RaiseOnScreenshotTaken();
+            }
         }
 
         /// <summary>
-        /// Converts a Bitmap to a BitmapImage using a memory stream.
+        ///     Converts a Bitmap to a BitmapImage using a memory stream.
         /// </summary>
         private void ConvertBitmapToBitmapImage()
         {
-            if (this.screenBitmap == null)
+            if (ScreenBitmap == null)
             {
                 throw new NullReferenceException();
             }
 
-            MemoryStream ms = new MemoryStream();
-            this.screenBitmap.Save(ms, ImageFormat.Bmp);
-            this.ScreenBitmapImage = new BitmapImage();
-            this.ScreenBitmapImage.BeginInit();
+            var ms = new MemoryStream();
+            ScreenBitmap.Bitmap.Save(ms, ImageFormat.Bmp);
+            ScreenBitmapImage = new BitmapImage();
+            ScreenBitmapImage.BeginInit();
             ms.Seek(0, SeekOrigin.Begin);
-            this.ScreenBitmapImage.StreamSource = ms;
-            this.ScreenBitmapImage.EndInit();
+            ScreenBitmapImage.StreamSource = ms;
+            ScreenBitmapImage.EndInit();
         }
 
-        private void FireOnScreenshotTaken()
+        private void RaiseOnScreenshotTaken()
         {
-            if (this.OnScreenshotTaken != null)
-            {
-                this.OnScreenshotTaken(this, new ScreenCaptureOnScreenshotTakenEventArgs(this, this.pictureCreator));
-            }
+            OnScreenshotTaken?.Invoke(this, new ScreenCaptureOnScreenshotTakenEventArgs(this, _pictureCreator));
         }
 
-        private void FireOnAnimationCreated()
+        private void RaiseOnAnimationCreated()
         {
-            if (this.OnAnimationCreated != null)
-            {
-                this.OnAnimationCreated(this, new ScreenCaptureOnAnimationCreatedEventArgs(this, this.AnimationCreator));
-            }
+            OnAnimationCreated?.Invoke(this, new ScreenCaptureOnAnimationCreatedEventArgs(this, AnimationCreator));
         }
     }
 }

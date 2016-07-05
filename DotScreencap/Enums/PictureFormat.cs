@@ -1,13 +1,18 @@
-﻿namespace DotScreencap
+﻿namespace DotScreencap.Enums
 {
     /// <summary>
-    /// Image formats.
+    ///     Image formats.
     /// </summary>
     public enum PictureFormat
     {
         /// <summary>
-        /// The jpg format.
+        ///     The jpg format.
         /// </summary>
-        Jpg
+        Jpg,
+
+        /// <summary>
+        ///     The  Bmp format.
+        /// </summary>
+        Bmp
     }
 }

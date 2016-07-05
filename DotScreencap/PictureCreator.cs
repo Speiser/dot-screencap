@@ -1,43 +1,47 @@
-﻿namespace DotScreencap
-{
-    using System;
-    using System.IO;
-    using System.Windows.Media.Imaging;
+﻿using System;
+using System.IO;
+using System.Windows.Media.Imaging;
+using DotScreencap.Enums;
 
+namespace DotScreencap
+{
     /// <summary>
-    /// Represents the picture creator class.
-    /// Is used to create local picture files.
+    ///     Represents the picture creator class.
+    ///     Is used to create local picture files.
     /// </summary>
     public sealed class PictureCreator
     {
-        private BitmapImage image;
-        private PictureFormat format = PictureFormat.Jpg;
-        private string filename;
-        private int count = 1;
+        private int _count = 1;
+        private string _filename;
+        private BitmapImage _image;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PictureCreator"/> class.
+        ///     Initializes a new instance of the <see cref="PictureCreator" /> class.
         /// </summary>
-        public PictureCreator(BitmapImage image) : this(image, "screenshot") { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PictureCreator"/> class.
-        /// </summary>
-        public PictureCreator(BitmapImage image, string filename)
+        public PictureCreator(BitmapImage image) : this(image, "screenshot")
         {
-            this.Image = image;
-            this.Filename = filename;
         }
 
         /// <summary>
-        /// Gets or sets the bitmap image.
+        ///     Initializes a new instance of the <see cref="PictureCreator" /> class.
+        /// </summary>
+        public PictureCreator(BitmapImage image, string filename)
+        {
+            Image = image;
+            Filename = filename;
+        }
+
+        /// <summary>
+        ///     The format to save the image as.
+        /// </summary>
+        public PictureFormat Format { get; set; } = PictureFormat.Jpg;
+
+        /// <summary>
+        ///     Gets or sets the bitmap image.
         /// </summary>
         public BitmapImage Image
         {
-            get
-            {
-                return this.image;
-            }
+            get { return _image; }
 
             set
             {
@@ -46,19 +50,16 @@
                     throw new NullReferenceException();
                 }
 
-                this.image = value;
+                _image = value;
             }
         }
 
         /// <summary>
-        /// Gets the filename of the screenshot.
+        ///     Gets the filename of the screenshot.
         /// </summary>
         public string Filename
         {
-            get
-            {
-                return this.filename;
-            }
+            get { return _filename; }
 
             private set
             {
@@ -67,37 +68,58 @@
                     throw new ArgumentOutOfRangeException();
                 }
 
-                this.filename = value;
+                _filename = value;
             }
         }
 
         /// <summary>
-        /// Saves a picture to the execution folder.
+        ///     Saves a picture to the execution folder.
         /// </summary>
         public void SaveScreenshot()
         {
-            switch (this.format)
+            switch (Format)
             {
                 case PictureFormat.Jpg:
-                    {
-                        this.SaveScreenshotAsJPG();
-                        break;
-                    }
+                {
+                    SaveScreenshotAsJpg();
+                    break;
+                }
+                case PictureFormat.Bmp:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
         /// <summary>
-        /// Saves a *.jpg to the execution folder.
+        ///     Saves a *.jpg to the execution folder.
         /// </summary>
-        public void SaveScreenshotAsJPG()
+        public void SaveScreenshotAsJpg(int qualityLevel = 100)
         {
-            string screenshotName;
-            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            encoder.QualityLevel = 100;
-            screenshotName = (this.Filename == "screenshot") ? this.Filename + this.count.ToString() + ".jpg" : this.Filename + ".jpg";
-            this.count++;
+            var encoder = new JpegBitmapEncoder {QualityLevel = qualityLevel};
+            var screenshotName = Filename == "screenshot" ? Filename + _count + ".jpg" : Filename + ".jpg";
 
-            encoder.Frames.Add(BitmapFrame.Create(this.Image));
+            _count++;
+            var frame = BitmapFrame.Create(Image);
+            encoder.Frames.Add(frame);
+
+            using (var filestream = new FileStream(screenshotName, FileMode.OpenOrCreate))
+            {
+                encoder.Save(filestream);
+            }
+        }
+
+        /// <summary>
+        ///     Saves a *.jpg to the execution folder.
+        /// </summary>
+        public void SaveScreenshotAsBmp()
+        {
+            var encoder = new BmpBitmapEncoder();
+            var screenshotName = Filename == "screenshot" ? Filename + _count + ".bmp" : Filename + ".bmp";
+
+            _count++;
+            var frame = BitmapFrame.Create(Image);
+            encoder.Frames.Add(frame);
 
             using (var filestream = new FileStream(screenshotName, FileMode.OpenOrCreate))
             {
