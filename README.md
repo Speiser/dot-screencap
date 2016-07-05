@@ -46,6 +46,10 @@ screencap.ScreenRegion.UpperLeftCorner = new Point(100, 100);
 // or
 screencap.ScreenRegion.SetLowerRightCorner(); // Will set the Point to the current mouse position.
  ```
++ Record videos **Thanks to [Jacob Kemple](https://github.com/lolp1)**.  
+ ``` csharp
+// Added later.
+ ```
 
 ***
 
@@ -73,10 +77,10 @@ Click [here](https://github.com/Speisaa/dot-screencap/blob/master/Documentation/
 - [x] Add Documentation (added in v0.1.2)
 - [x] Add Multimonitor support (added in v0.1.5)
 - [x] Add selectable screenregion (added in v0.1.6)
+- [x] Record Videos  (added in v0.2.0) **Thanks to [Jacob Kemple](https://github.com/lolp1)**
 - [ ] Change output resolution
 - [ ] Add Examples
 - [ ] Change output path
-- [ ] Record Videos
 
 ***
 
