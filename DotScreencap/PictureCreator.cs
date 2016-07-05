@@ -18,23 +18,24 @@ namespace DotScreencap
         /// <summary>
         ///     Initializes a new instance of the <see cref="PictureCreator" /> class.
         /// </summary>
-        public PictureCreator(BitmapImage image) : this(image, "screenshot")
+        public PictureCreator(BitmapImage image, PictureFormat format) : this(image, "screenshot", format)
         {
         }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="PictureCreator" /> class.
         /// </summary>
-        public PictureCreator(BitmapImage image, string filename)
+        public PictureCreator(BitmapImage image, string filename, PictureFormat format)
         {
             Image = image;
             Filename = filename;
+            Format = format;
         }
 
         /// <summary>
         ///     The format to save the image as.
         /// </summary>
-        public PictureFormat Format { get; set; } = PictureFormat.Jpg;
+        public PictureFormat Format { get; set; }
 
         /// <summary>
         ///     Gets or sets the bitmap image.
@@ -84,8 +85,13 @@ namespace DotScreencap
                     SaveScreenshotAsJpg();
                     break;
                 }
+
                 case PictureFormat.Bmp:
+                {
+                    SaveScreenshotAsBmp();
                     break;
+                }
+                    
                 default:
                     throw new ArgumentOutOfRangeException();
             }

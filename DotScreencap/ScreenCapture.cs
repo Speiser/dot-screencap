@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using DotScreencap.Enums;
 using DotScreencap.EventArgs;
 
 namespace DotScreencap
@@ -87,8 +88,9 @@ namespace DotScreencap
         /// <summary>
         ///     Saves a *.jpg to the execution folder.
         /// </summary>
+        /// <param name="format">Specified picture format.</param>
         /// <param name="filename">Possibly specified filename.</param>
-        public void TakeScreenshot(params string[] filename)
+        public void TakeScreenshot(PictureFormat format, params string[] filename)
         {
             GetBitmapOfScreen();
             ConvertBitmapToBitmapImage();
@@ -101,15 +103,16 @@ namespace DotScreencap
             if (_pictureCreator == null)
             {
                 _pictureCreator = filename.Length < 1
-                    ? new PictureCreator(ScreenBitmapImage)
-                    : new PictureCreator(ScreenBitmapImage, filename[0]);
+                    ? new PictureCreator(ScreenBitmapImage, format)
+                    : new PictureCreator(ScreenBitmapImage, filename[0], format);
             }
             else
             {
+                _pictureCreator.Format = format;
                 _pictureCreator.Image = ScreenBitmapImage;
             }
 
-            _pictureCreator.SaveScreenshotAsJpg();
+            _pictureCreator.SaveScreenshot();
 
             RaiseOnScreenshotTaken();
         }
@@ -142,6 +145,7 @@ namespace DotScreencap
             var screen = Graphics.FromImage(ScreenBitmap.Bitmap);
             screen.CopyFromScreen(ScreenRegion.UpperLeftCorner.X, ScreenRegion.UpperLeftCorner.Y, 0, 0,
                 new Size(width, height));
+
             if (raiseOnScreenShotEvent)
             {
                 RaiseOnScreenshotTaken();
