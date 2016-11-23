@@ -1,4 +1,4 @@
-﻿namespace DotScreencap.Enums
+﻿namespace DotScreencap
 {
     /// <summary>
     ///     Animation formats.

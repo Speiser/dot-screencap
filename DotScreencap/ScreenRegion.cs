@@ -1,8 +1,8 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-
-namespace DotScreencap
+﻿namespace DotScreencap
 {
+    using System.Drawing;
+    using System.Windows.Forms;
+
     /// <summary>
     ///     Represents the screen region class.
     /// </summary>

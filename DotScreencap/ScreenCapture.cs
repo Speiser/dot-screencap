@@ -1,14 +1,12 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Windows.Forms;
-using System.Windows.Media.Imaging;
-using DotScreencap.Enums;
-using DotScreencap.EventArgs;
-
-namespace DotScreencap
+﻿namespace DotScreencap
 {
+    using System;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
+    using System.Windows.Forms;
+    using System.Windows.Media.Imaging;
+
     /// <summary>
     ///     Represents the ScreenCapture class.
     /// </summary>
@@ -40,7 +38,7 @@ namespace DotScreencap
         /// <summary>
         ///     Gets or sets the screen bitmap.
         /// </summary>
-        public DirectBitmap ScreenBitmap { get; set; }
+        public Bitmap ScreenBitmap { get; set; }
 
         /// <summary>
         ///     Gets the ScreenBitmapImage.
@@ -113,20 +111,19 @@ namespace DotScreencap
             }
 
             _pictureCreator.SaveScreenshot();
-
-            RaiseOnScreenshotTaken();
+            _RaiseOnScreenshotTaken();
         }
 
         /// <summary>
         ///     Saves an animated *.gif to the execution folder.
         /// </summary>
         /// <param name="frames">Amount of frames that will be captured.</param>
-        /// <param name="wait">Time in milliseconds between each frame.</param>
+        /// <param name="wait_ms_between_frames">Time in milliseconds between each frame.</param>
         /// <param name="filename">Possibly specified filename.</param>
-        public void CreateGif(int frames, int wait, params string[] filename)
+        public void CreateAnimation(int frames, int wait_ms_between_frames, params string[] filename)
         {
-            AnimationCreator.SaveAnimationAsGif(frames, wait);
-            RaiseOnAnimationCreated();
+            AnimationCreator.SaveAnimationAsGif(frames, wait_ms_between_frames);
+            _RaiseOnAnimationCreated();
         }
 
         /// <summary>
@@ -141,14 +138,14 @@ namespace DotScreencap
 
             var width = ScreenRegion.LowerRightCorner.X - ScreenRegion.UpperLeftCorner.X;
             var height = ScreenRegion.LowerRightCorner.Y - ScreenRegion.UpperLeftCorner.Y;
-            ScreenBitmap = new DirectBitmap(width, height);
-            var screen = Graphics.FromImage(ScreenBitmap.Bitmap);
+            ScreenBitmap = new Bitmap(width, height);
+            var screen = Graphics.FromImage(ScreenBitmap);
             screen.CopyFromScreen(ScreenRegion.UpperLeftCorner.X, ScreenRegion.UpperLeftCorner.Y, 0, 0,
                 new Size(width, height));
 
             if (raiseOnScreenShotEvent)
             {
-                RaiseOnScreenshotTaken();
+                _RaiseOnScreenshotTaken();
             }
         }
 
@@ -163,7 +160,7 @@ namespace DotScreencap
             }
 
             var ms = new MemoryStream();
-            ScreenBitmap.Bitmap.Save(ms, ImageFormat.Bmp);
+            ScreenBitmap.Save(ms, ImageFormat.Bmp);
             ScreenBitmapImage = new BitmapImage();
             ScreenBitmapImage.BeginInit();
             ms.Seek(0, SeekOrigin.Begin);
@@ -171,12 +168,12 @@ namespace DotScreencap
             ScreenBitmapImage.EndInit();
         }
 
-        private void RaiseOnScreenshotTaken()
+        private void _RaiseOnScreenshotTaken()
         {
             OnScreenshotTaken?.Invoke(this, new ScreenCaptureOnScreenshotTakenEventArgs(this, _pictureCreator));
         }
 
-        private void RaiseOnAnimationCreated()
+        private void _RaiseOnAnimationCreated()
         {
             OnAnimationCreated?.Invoke(this, new ScreenCaptureOnAnimationCreatedEventArgs(this, AnimationCreator));
         }

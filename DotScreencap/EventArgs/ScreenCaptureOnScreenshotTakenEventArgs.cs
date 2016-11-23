@@ -1,9 +1,11 @@
-﻿namespace DotScreencap.EventArgs
+﻿namespace DotScreencap
 {
+    using System;
+
     /// <summary>
     ///     Represents the ScreenCaptureOnScreenshotTakenEventArgs class.
     /// </summary>
-    public class ScreenCaptureOnScreenshotTakenEventArgs : System.EventArgs
+    public class ScreenCaptureOnScreenshotTakenEventArgs : EventArgs
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="ScreenCaptureOnScreenshotTakenEventArgs" /> class.

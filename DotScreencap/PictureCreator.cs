@@ -1,15 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Windows.Media.Imaging;
-using DotScreencap.Enums;
-
-namespace DotScreencap
+﻿namespace DotScreencap
 {
+    using System;
+    using System.IO;
+    using System.Windows.Media.Imaging;
+
     /// <summary>
     ///     Represents the picture creator class.
     ///     Is used to create local picture files.
     /// </summary>
-    public sealed class PictureCreator
+    public class PictureCreator
     {
         private int _count = 1;
         private string _filename;
@@ -116,7 +115,7 @@ namespace DotScreencap
         }
 
         /// <summary>
-        ///     Saves a *.jpg to the execution folder.
+        ///     Saves a *.bmp to the execution folder.
         /// </summary>
         public void SaveScreenshotAsBmp()
         {

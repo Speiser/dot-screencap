@@ -1,19 +1,18 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Threading;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
-using DotScreencap.EventArgs;
-
-namespace DotScreencap
+﻿namespace DotScreencap
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Threading;
+    using System.Windows;
+    using System.Windows.Interop;
+    using System.Windows.Media.Imaging;
+
     /// <summary>
     ///     Represents the animate class.
     ///     Is used for the creation of animated gifs.
     /// </summary>
-    public sealed class AnimationCreator
+    public class AnimationCreator
     {
         private readonly ScreenCapture _screencap;
         private string _filename;
@@ -76,7 +75,7 @@ namespace DotScreencap
                     _screencap.GetBitmapOfScreen();
 
                     var source = Imaging.CreateBitmapSourceFromHBitmap(
-                        _screencap.ScreenBitmap.Bitmap.GetHbitmap(),
+                        _screencap.ScreenBitmap.GetHbitmap(),
                         IntPtr.Zero,
                         Int32Rect.Empty,
                         BitmapSizeOptions.FromEmptyOptions());
@@ -84,13 +83,11 @@ namespace DotScreencap
                     encoder.Frames.Add(BitmapFrame.Create(source));
                     Thread.Sleep(wait);
                 }
-
                 catch (OutOfMemoryException e)
                 {
                     RaiseOnOutOfMemoryExceptionThrown(e, i);
                     break;
                 }
-
                 catch (Exception e)
                 {
                     Trace.WriteLine(e.Message);
@@ -98,9 +95,7 @@ namespace DotScreencap
             }
 
             RaiseOnAnimationRecorded();
-
             Thread.Sleep(1000);
-
             encoder.Save(new FileStream(_filename, FileMode.Create));
         }
 
@@ -111,8 +106,7 @@ namespace DotScreencap
 
         private void RaiseOnOutOfMemoryExceptionThrown(OutOfMemoryException e, int thrownAfterXFrames)
         {
-            OnOutOfMemoryExceptionThrown?.Invoke(this,
-                new AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs(e, thrownAfterXFrames));
+            OnOutOfMemoryExceptionThrown?.Invoke(this, new AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs(e, thrownAfterXFrames));
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System;
-
-namespace DotScreencap.EventArgs
+﻿namespace DotScreencap
 {
+    using System;
+
     /// <summary>
     ///     Represents the AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs class.
     /// </summary>
-    public class AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs : System.EventArgs
+    public class AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs : EventArgs
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="AnimationCreatorOnOutOfMemoryExceptionThrownEventArgs" /> class.

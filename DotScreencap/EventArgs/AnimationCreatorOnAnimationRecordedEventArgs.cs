@@ -1,9 +1,11 @@
-﻿namespace DotScreencap.EventArgs
+﻿namespace DotScreencap
 {
+    using System;
+
     /// <summary>
     ///     Represents the ScreenCaptureOnAnimationCreatedEventArgs class.
     /// </summary>
-    public class AnimationCreatorOnAnimationRecordedEventArgs : System.EventArgs
+    public class AnimationCreatorOnAnimationRecordedEventArgs : EventArgs
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="AnimationCreatorOnAnimationRecordedEventArgs" /> class.
