@@ -1,10 +1,11 @@
 # dot-screencap
 
 ## Features
-+ ...
++ Take screenshots
 
  ``` csharp
-// do stuff
+var screencap = new ScreenCapture();
+screencap.TakeScreenshot();
  ```
 + ...  
 
@@ -37,9 +38,9 @@ Added later
 ***
 
 ## Planned features
-- [ ] Take Screenshots
-- [ ] Create Animations
-- [ ] Add Multimonitor support
+- [X] Take screenshots
+- [ ] Create animations
+- [ ] Add multimonitor support
 - [ ] Add selectable screenregion
 - [ ] Performance improvements
 - [ ] Change output path
