@@ -50,7 +50,18 @@ namespace DotScreencap
         /// <param name="quality">[Optional] Quality level of a <see cref="PictureFormat.Jpg"/>.</param>
         public void TakeScreenshot(PictureFormat format = PictureFormat.Jpg, string filename = "screenshot", int quality = 100)
         {
-            PictureCreator.EncodeScreenshot(this.BitmapImage, format, filename, quality);
+            PictureCreator.TakeScreenshot(this.BitmapImage, format, filename, quality);
+        }
+
+        /// <summary>
+        /// Records and saves an animation to the execution folder.
+        /// </summary>
+        /// <param name="frames">Amount of frames that will be captured.</param>
+        /// <param name="wait">Time in milliseconds between each frame.</param>
+        /// <param name="filename">[Optional] File name.</param>
+        public void RecordAnimation(int frames, int wait, string filename = "recording.gif")
+        {
+            AnimationCreator.CreateAnimation(this, frames, wait, filename);
         }
 
         internal Bitmap GetBitmapOfScreen()
@@ -62,7 +73,6 @@ namespace DotScreencap
             screen.CopyFromScreen(this.ScreenRegion.UpperLeftCorner.X, 
                                   this.ScreenRegion.UpperLeftCorner.Y, 0, 0,
                                   new Size(width, height));
-
             return bitmap;
         }
 

@@ -7,19 +7,21 @@
 var screencap = new ScreenCapture();
 screencap.TakeScreenshot();
  ```
-+ ...  
++ Record animations  
 
  ``` csharp
-// do stuff
+var screencap = new ScreenCapture();
+screencap.RecordAnimation(50, 100);  // 50 frames, 10 per second.
  ```
 
-+ ... 
++ Select screenregion
 
  ``` csharp
-// do stuff
+var screencap = new ScreenCapture();
+screencap.ScreenRegion = new ScreenRegion(...);
  ```
 
-+ ...  
++ Change monitor  
 
  ``` csharp
 // do stuff
@@ -39,9 +41,9 @@ Added later
 
 ## Planned features
 - [X] Take screenshots
-- [ ] Create animations
+- [X] Record animations
 - [ ] Add multimonitor support
-- [ ] Add selectable screenregion
+- [X] Add selectable screenregion
 - [ ] Performance improvements
 - [ ] Change output path
 

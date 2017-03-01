@@ -9,6 +9,11 @@ namespace DotScreencap
     /// </summary>
     internal static class PictureCreator
     {
+        internal static void TakeScreenshot(BitmapImage bitmap, PictureFormat format, string filename, int quality)
+        {
+            EncodeScreenshot(bitmap, format, filename, quality);
+        }
+
         /// <summary>
         /// Creates the encoder which is used to save the screenshot and calls <see cref="SaveScreenshot(BitmapImage, string, BitmapEncoder)"/>.
         /// </summary>
@@ -16,7 +21,7 @@ namespace DotScreencap
         /// <param name="format">Picture format.</param>
         /// <param name="filename">File name.</param>
         /// <param name="quality">Quality level of a <see cref="PictureFormat.Jpg"/>.</param>
-        internal static void EncodeScreenshot(BitmapImage bitmap, PictureFormat format, string filename, int quality)
+        private static void EncodeScreenshot(BitmapImage bitmap, PictureFormat format, string filename, int quality)
         {
             BitmapEncoder encoder;
 
@@ -43,7 +48,7 @@ namespace DotScreencap
         /// <param name="bitmap">Bitmap image.</param>
         /// <param name="filename">File name.</param>
         /// <param name="encoder">Bitmap encoder.</param>
-        internal static void SaveScreenshot(BitmapImage bitmap, string filename, BitmapEncoder encoder)
+        private static void SaveScreenshot(BitmapImage bitmap, string filename, BitmapEncoder encoder)
         {
             var frame = BitmapFrame.Create(bitmap);
             encoder.Frames.Add(frame);
