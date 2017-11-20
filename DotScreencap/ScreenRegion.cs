@@ -27,5 +27,15 @@ namespace DotScreencap
         /// Gets or sets the lower right corner <see cref="Point"/>.
         /// </summary>
         public Point LowerRightCorner { get; set; }
+
+        /// <summary>
+        /// Gets the height of the selected screenregion.
+        /// </summary>
+        public int Height => this.LowerRightCorner.Y - this.UpperLeftCorner.Y;
+
+        /// <summary>
+        /// Gets the width of the selected screenregion.
+        /// </summary>
+        public int Width => this.LowerRightCorner.X - this.UpperLeftCorner.X;
     }
 }

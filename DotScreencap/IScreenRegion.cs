@@ -16,5 +16,15 @@ namespace DotScreencap
         /// Gets or sets the lower right corner <see cref="Point"/>.
         /// </summary>
         Point LowerRightCorner { get; set; }
+
+        /// <summary>
+        /// Gets the height of the selected screenregion.
+        /// </summary>
+        int Height { get; }
+
+        /// <summary>
+        /// Gets the width of the selected screenregion.
+        /// </summary>
+        int Width { get; }
     }
 }

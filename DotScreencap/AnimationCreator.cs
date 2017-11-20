@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -16,28 +15,29 @@ namespace DotScreencap
 
             for (var i = 0; i < frames; i++)
             {
-                try
+                using (var bmp = sc.GetBitmapOfScreen())
                 {
-                    var source = Imaging.CreateBitmapSourceFromHBitmap(
-                                 sc.GetBitmapOfScreen().GetHbitmap(),
-                                 IntPtr.Zero,
-                                 Int32Rect.Empty,
-                                 BitmapSizeOptions.FromEmptyOptions());
-                    encoder.Frames.Add(BitmapFrame.Create(source));
-                    Thread.Sleep(wait);
+                    var size = BitmapSizeOptions.FromEmptyOptions();
+                    var source = Imaging.CreateBitmapSourceFromHBitmap(bmp.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, size);
+                    var frame = BitmapFrame.Create(source);
+                    encoder.Frames.Add(frame);
                 }
-                catch (OutOfMemoryException e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                Thread.Sleep(wait);
             }
 
             Thread.Sleep(1000);
-            encoder.Save(new FileStream(filename, FileMode.Create));
+            using (var fs = new FileStream(filename, FileMode.Create))
+            {
+                encoder.Save(fs);
+                encoder.Frames.Clear();
+                encoder = null;
+            }
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 }

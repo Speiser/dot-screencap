@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
@@ -12,19 +13,16 @@ namespace DotScreencap
     /// </summary>
     public class ScreenCapture
     {
-        /// <summary>
-        /// Represents the bounds of the display.
-        /// </summary>
-        private Rectangle _screenSize;
+        private int _scalingFactor = 1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScreenCapture"/> class.
         /// </summary>
         public ScreenCapture()
         {
-            _screenSize = Screen.PrimaryScreen.Bounds;
+            var screenSize = Screen.PrimaryScreen.Bounds;
             this.ScreenRegion = new ScreenRegion(new Point(0, 0), 
-                                                 new Point(_screenSize.Width, _screenSize.Height));
+                                                 new Point(screenSize.Width, screenSize.Height));
         }
 
         /// <summary>
@@ -33,9 +31,28 @@ namespace DotScreencap
         public Screen[] AllScreens => Screen.AllScreens;
 
         /// <summary>
-        /// Gets a <see cref="BitmapSource"/> that can be used with XAML.
+        /// Gets or sets the scaling factor.
+        /// This value is used to lower the gif pixel size.
+        /// Size = Height / ScalingFactor: Width / ScalingFactor.
+        /// Default is 1. Raise the value if you want to record long gifs.
         /// </summary>
-        public BitmapImage BitmapImage => this.GetBitmapImageFromBitmap(this.GetBitmapOfScreen());
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if value is less than 1.
+        /// </exception>
+        public int ScalingFactor
+        {
+            get => _scalingFactor;
+            set
+            {
+                if (value < 1)
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        "Value has to greater than or equal to 1."
+                    );
+
+                _scalingFactor = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the current <see cref="IScreenRegion"/>.
@@ -50,7 +67,17 @@ namespace DotScreencap
         /// <param name="quality">[Optional] Quality level of a <see cref="PictureFormat.Jpg"/>.</param>
         public void TakeScreenshot(PictureFormat format = PictureFormat.Jpg, string filename = "screenshot", int quality = 100)
         {
-            PictureCreator.TakeScreenshot(this.BitmapImage, format, filename, quality);
+            var bitmap = this.GetBitmapOfScreen();
+            var bitmapImage = this.GetBitmapImageFromBitmap(bitmap);
+
+            PictureCreator.TakeScreenshot(bitmapImage, format, filename, quality);
+
+            bitmap.Dispose();
+            bitmapImage.StreamSource.Close();
+            bitmapImage = null;
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         /// <summary>
@@ -66,23 +93,42 @@ namespace DotScreencap
 
         internal Bitmap GetBitmapOfScreen()
         {
-            int width = this.ScreenRegion.LowerRightCorner.X - this.ScreenRegion.UpperLeftCorner.X;
-            int height = this.ScreenRegion.LowerRightCorner.Y - this.ScreenRegion.UpperLeftCorner.Y;
-            var bitmap = new Bitmap(width, height);
-            var screen = Graphics.FromImage(bitmap);
-            screen.CopyFromScreen(this.ScreenRegion.UpperLeftCorner.X, 
-                                  this.ScreenRegion.UpperLeftCorner.Y, 0, 0,
-                                  new Size(width, height));
+            var bitmap = new Bitmap(this.ScreenRegion.Width, this.ScreenRegion.Height);
+            using (var screen = Graphics.FromImage(bitmap))
+            {
+                screen.CopyFromScreen(
+                    this.ScreenRegion.UpperLeftCorner.X,
+                    this.ScreenRegion.UpperLeftCorner.Y, 0, 0,
+                    new Size(this.ScreenRegion.Width, this.ScreenRegion.Height)
+                );
+            }
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            if (ScalingFactor > 1)
+            {
+                bitmap = new Bitmap(bitmap, new Size(this.ScreenRegion.Width / this.ScalingFactor,
+                                                     this.ScreenRegion.Height / this.ScalingFactor));
+            }
+
             return bitmap;
         }
 
         internal BitmapImage GetBitmapImageFromBitmap(Bitmap bitmap)
         {
+            var bitmapImage = new BitmapImage();
+
+            // Don´t dispose the memory stream here or
+            // BitmapFrame.Create(bitmap) in PictureCreator
+            // will throw an ObjectDisposedException!
+            // The memory stream is disposed in 
+            // this.TakeScreenshot()...
             var ms = new MemoryStream();
             bitmap.Save(ms, ImageFormat.Bmp);
-            var bitmapImage = new BitmapImage();
-            bitmapImage.BeginInit();
             ms.Seek(0, SeekOrigin.Begin);
+
+            bitmapImage.BeginInit();
             bitmapImage.StreamSource = ms;
             bitmapImage.EndInit();
 

@@ -11,18 +11,6 @@ namespace DotScreencap
     {
         internal static void TakeScreenshot(BitmapImage bitmap, PictureFormat format, string filename, int quality)
         {
-            EncodeScreenshot(bitmap, format, filename, quality);
-        }
-
-        /// <summary>
-        /// Creates the encoder which is used to save the screenshot and calls <see cref="SaveScreenshot(BitmapImage, string, BitmapEncoder)"/>.
-        /// </summary>
-        /// <param name="bitmap">Bitmap image.</param>
-        /// <param name="format">Picture format.</param>
-        /// <param name="filename">File name.</param>
-        /// <param name="quality">Quality level of a <see cref="PictureFormat.Jpg"/>.</param>
-        private static void EncodeScreenshot(BitmapImage bitmap, PictureFormat format, string filename, int quality)
-        {
             BitmapEncoder encoder;
 
             switch (format)
@@ -39,23 +27,11 @@ namespace DotScreencap
                     throw new ArgumentException($"Unknown format {nameof(format)}");
             }
 
-            SaveScreenshot(bitmap, filename, encoder);
-        }
-
-        /// <summary>
-        /// Saves the screenshot with a filestream.
-        /// </summary>
-        /// <param name="bitmap">Bitmap image.</param>
-        /// <param name="filename">File name.</param>
-        /// <param name="encoder">Bitmap encoder.</param>
-        private static void SaveScreenshot(BitmapImage bitmap, string filename, BitmapEncoder encoder)
-        {
-            var frame = BitmapFrame.Create(bitmap);
-            encoder.Frames.Add(frame);
-
             using (var fs = new FileStream(filename, FileMode.OpenOrCreate))
             {
+                encoder.Frames.Add(BitmapFrame.Create(bitmap));
                 encoder.Save(fs);
+                encoder.Frames.Clear();
             }
         }
     }
